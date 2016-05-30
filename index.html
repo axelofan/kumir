@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head>
+<title>КуМир</title>
+<meta charset='UTF-8'>
+<link rel='stylesheet' type='text/css' href='styles.css'>
+<script type='text/javascript' src='kumir.js'></script>
+</head>
+<body>
+<textarea id='input'></textarea><br>
+<div id='output'></div>
+<input type='button' value='Выполнить' id='button'>
+<script type='text/javascript'>
+	input = document.getElementById('input');
+	output = document.getElementById('output');
+	button = document.getElementById('button');
+	button.onclick = function() {
+		kumir.start(input,output);
+	}
+</script>
+</body>
+</html>

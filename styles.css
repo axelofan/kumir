@@ -1,0 +1,11 @@
+#input {
+	width : 500px;
+	height : 300px;
+	background: #fefefe
+}
+#output {
+	width: 500px;
+	height: 200px;
+	border: 1px solid black;
+}
+	
