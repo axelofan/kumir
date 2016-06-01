@@ -11,6 +11,11 @@ kumir.start = function(input, output) {
 
 //Парсинг команд
 kumir.parseCommand = function(command) {
+	
+	//Скрытие текста с кавычками (чтобы он не менялся)
+	var substring=command.match(/'[^']*'|"[^"]*"/g);
+	for (i in substring) command = command.replace(substring[i],'$_'+i);
+	
 	command = ' ' + command + ' '; //волшебный костыль
 	
 	command = command.replace(/вывод(.+)/g,'kumir.print($1);'); //замена команды вывода
@@ -38,6 +43,10 @@ kumir.parseCommand = function(command) {
 	command = command.replace(/\sалг\s/g,' ');
 	command = command.replace(/\sнач\s/g,' { '); //замена начала функции
 	command = command.replace(/\sкон\s/g,' } '); //замена конца функции
+	
+	//Возврат текста в кавычках
+	for (i in substring) command = command.replace('$_'+i,substring[i]);
+	
 	console.log(command); //TODO: удалить перед продакшном
 	eval(command);
 }
