@@ -5,15 +5,21 @@
 <meta charset='UTF-8'>
 <link rel='stylesheet' type='text/css' href='styles.css'>
 <script type='text/javascript' src='kumir.js'></script>
+<script type='text/javascript' src='robot.js'></script>
 </head>
 <body>
+<div id='left-side'>
 <textarea id='input'></textarea><br>
-<div id='output'></div>
+<textarea id='output' disabled = 'true'></textarea><br>
 <input type='button' value='Выполнить' id='button'>
+</div>
+<div id='right-side'></div>
 <script type='text/javascript'>
 	input = document.getElementById('input');
 	output = document.getElementById('output');
 	button = document.getElementById('button');
+	container = document.getElementById('right-side');
+	robot.board.create(container);
 	button.onclick = function() {
 		kumir.start(input,output);
 	}
