@@ -6,7 +6,15 @@ textarea {
 }
 .cells {
 	background:Lime;
-	border:2px LimeGreen solid;
+}
+.active {
+	background:Orange !important;
+}
+.walls {
+	background:LimeGreen;
+}
+.walls:hover {
+	background:Gold;
 }
 .robot {
 	background-image:url(robot.png);
