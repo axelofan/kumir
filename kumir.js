@@ -47,7 +47,6 @@ kumir.parseCommand = function(command) {
 	command = command.replace(/\sвсе\s/g,' } '); //замена конца условия
 	
 	command = command.replace(/\sнц\s+пока\s+(.+)\s/g,' while($1){'); //замена начала цикла while
-	console.log(command);
 	command = command.replace(/\sкц\s+при\s+(.+)\s/g,'}while($1)\n'); //замена конца цикла do..while
 	
 	command = command.replace(/\sкц\s/g,' } ') //замена конца цикла while

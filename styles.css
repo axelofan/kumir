@@ -10,6 +10,9 @@ textarea {
 .active {
 	background-color:Orange !important;
 }
+.fail {
+	background-color:Red !important;
+}
 .walls {
 	background:LimeGreen;
 }

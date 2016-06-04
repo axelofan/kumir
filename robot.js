@@ -77,16 +77,20 @@ robot.paint = function() {
 }
 
 robot.right = function() {
-	robot.moveRobot(robot.x+1,robot.y);
+	if (robot.onRight(true)) robot.moveRobot(robot.x+1,robot.y);
+	else robot.fail();
 }
 robot.left = function() {
-	robot.moveRobot(robot.x-1,robot.y);
+	if (robot.onLeft(true)) robot.moveRobot(robot.x-1,robot.y);
+	else robot.fail();
 }
 robot.up = function() {
-	robot.moveRobot(robot.x,robot.y-1);
+	if (robot.onTop(true)) robot.moveRobot(robot.x,robot.y-1);
+	else robot.fail();
 }
 robot.down = function() {
-	robot.moveRobot(robot.x,robot.y+1);
+	if (robot.onBottom(true)) robot.moveRobot(robot.x,robot.y+1);
+	else robot.fail();
 }
 
 robot.onRight = function(wall) {
@@ -100,6 +104,11 @@ robot.onTop = function(wall) {
 }
 robot.onBottom = function(wall) {
 	return !(document.getElementById('h_'+robot.x+'_'+(robot.y+1)).classList.contains('active') == wall);
+}
+robot.fail = function() {
+	document.getElementById('c_'+robot.x+'_'+robot.y).classList.add('fail');
+	document.getElementById('c_'+robot.x+'_'+robot.y).classList.remove('fill');
+	throw 'collision';
 }
 robot.parseCommand = function(command) {
 	command = command.replace(/\s(влево|вправо|вверх|вниз)\s/g,'  $1  '); //волшебный костыль №4
@@ -121,5 +130,7 @@ robot.parseCommand = function(command) {
 
 robot.clean = function() {
 	var fillCell = document.getElementsByClassName('fill');
+	var errorCell = document.getElementsByClassName('fail');
 	while(fillCell.length!=0) {fillCell[0].classList.remove('fill');}
+	while(errorCell.length!=0) {errorCell[0].classList.remove('fail');}
 }
