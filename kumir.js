@@ -18,7 +18,7 @@ kumir.parseCommand = function(command) {
 	
 	command = ' ' + command + ' '; //волшебный костыль №1
 	command = command.replace(/\s(все|кц)\s/g,'  $1  '); //волшебный костыль №2
-	command = command.replace(/(нц.+)/g,'$1\n'); //волшебный костыль №3
+	command = command.replace(/(нц.+|кц.+)/g,'$1\n'); //волшебный костыль №3
 	
 	//Проверка на наличие и парсинг команд для исполнителя Робот 
 	if (/\sиспользовать\s+Робот\s/.test(command)) {
@@ -47,7 +47,12 @@ kumir.parseCommand = function(command) {
 	command = command.replace(/\sвсе\s/g,' } '); //замена конца условия
 	
 	command = command.replace(/\sнц\s+пока\s+(.+)\s/g,' while($1){'); //замена начала цикла while
-	command = command.replace(/\sкц\s/g,' } ') //замена конца цикла
+	console.log(command);
+	command = command.replace(/\sкц\s+при\s+(.+)\s/g,'}while($1)\n'); //замена конца цикла do..while
+	
+	command = command.replace(/\sкц\s/g,' } ') //замена конца цикла while
+	command = command.replace(/\sнц\s/g, ' do { '); //замена начала цикла do..while
+	
 	
 	command = command.replace(/\sалг\s/g,' ');
 	command = command.replace(/\sнач\s/g,' { '); //замена начала функции
