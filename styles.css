@@ -8,7 +8,7 @@ textarea {
 	background:Lime;
 }
 .active {
-	background:Orange !important;
+	background-color:Orange !important;
 }
 .walls {
 	background:LimeGreen;
@@ -19,6 +19,9 @@ textarea {
 .robot {
 	background-image:url(robot.png);
     background-size:contain;
+}
+.fill {
+	background-color: Gray !important;
 }
 #right-side {
 	position:absolute;
