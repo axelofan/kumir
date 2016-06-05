@@ -18,7 +18,7 @@ function startHighlight(h,t) {
 function applyhighlight(text) {
   text = text
     .replace(/\n$/g, '\n\n')
-    .replace(/нач|кон|нц|кц|алг|ввод|вывод|если|то|иначе|при|пока|все|использовать/g, '<mark class="keyword">$&</mark>')
+    .replace(/нач|кон|нц|кц|алг|ввод|вывод|если|то|иначе|при|пока|все|использовать|\:\=/g, '<mark class="keyword">$&</mark>')
 	.replace(/\s(и|или|не|да|нет)\s/g, ' <mark class="keyword">$1</mark> ')
 	.replace(/цел|вещ|лог|сим|лит/g, '<mark class="variable">$&</mark>')
 	.replace(/вправо|влево|вверх|вниз|сверху|снизу|слева|справа|свободно|стена|закрасить/g,'<mark class="exec">$&</mark>');
