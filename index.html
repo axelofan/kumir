@@ -6,9 +6,11 @@
 <link rel='stylesheet' type='text/css' href='styles.css'>
 <script type='text/javascript' src='kumir.js'></script>
 <script type='text/javascript' src='robot.js'></script>
+<script type='text/javascript' src='hignlight.js'></script>
 </head>
 <body>
 <div id='left-side'>
+<div id='highlight'></div>
 <textarea id='input'></textarea><br>
 <textarea id='output' disabled = 'true'></textarea><br>
 <input type='button' value='Выполнить' id='button'>
@@ -18,7 +20,9 @@
 	input = document.getElementById('input');
 	output = document.getElementById('output');
 	button = document.getElementById('button');
+	highlight = document.getElementById('highlight');
 	container = document.getElementById('right-side');
+	startHighlight(highlight,input);
 	robot.board.create(container);
 	button.onclick = function() {
 		kumir.start(input,output);
