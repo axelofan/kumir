@@ -21,7 +21,7 @@ function applyhighlight(text) {
     .replace(/нач|кон|нц|кц|алг|ввод|вывод|если|то|иначе|при|пока|все|использовать|\:\=/g, '<mark class="keyword">$&</mark>')
 	.replace(/\s(и|или|не|да|нет)\s/g, ' <mark class="keyword">$1</mark> ')
 	.replace(/цел|вещ|лог|сим|лит/g, '<mark class="variable">$&</mark>')
-	.replace(/вправо|влево|вверх|вниз|сверху|снизу|слева|справа|свободно|стена|закрасить/g,'<mark class="exec">$&</mark>');
+	.replace(/вправо|влево|вверх|вниз|сверху|снизу|слева|справа|свободно|стена|закрасить|клетка|чистая|закрашена/g,'<mark class="exec">$&</mark>');
   
   if (isIE) text = text.replace(/ /g, ' <wbr>');
   return text;

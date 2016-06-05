@@ -92,6 +92,9 @@ robot.down = function() {
 	if (robot.onBottom(true)) robot.moveRobot(robot.x,robot.y+1);
 	else robot.fail();
 }
+robot.isFill = function(fill) {
+	return document.getElementById('c_'+robot.x+'_'+robot.y).classList.contains('fill') == fill
+}
 
 robot.onRight = function(wall) {
 	return !(document.getElementById('v_'+(robot.x+1)+'_'+robot.y).classList.contains('active') == wall);
@@ -118,8 +121,13 @@ robot.parseCommand = function(command) {
 	command = command.replace(/\sвниз\s/g,' robot.down(); ');
 	command = command.replace(/\s(справа|слева|сверху|снизу)\s+(свободно|стена)/g,' $1 ( $2 )');
 	command = command.replace(/\s(справа|слева|сверху|снизу)\s+не\s+(свободно|стена)/g,' $1 (! $2 )');
+	command = command.replace(/\s(клетка)\s+(закрашена|чистая)/g,' $1 ( $2 )');
+	command = command.replace(/\s(клетка)\s+не\s+(закрашена|чистая)/g,' $1 (! $2 )');
 	command = command.replace(/\sстена\s/g,'false');
 	command = command.replace(/\sсвободно\s/g,'true');
+	command = command.replace(/\sчистая\s/g,'false');
+	command = command.replace(/\sзакрашена\s/g,'true');
+	command = command.replace(/\sклетка\s/g,' robot.isFill ');
 	command = command.replace(/\sсправа\s/g,' robot.onRight ');
 	command = command.replace(/\sслева\s/g,' robot.onLeft ');
 	command = command.replace(/\sсверху\s/g,' robot.onTop ');
