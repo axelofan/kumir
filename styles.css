@@ -19,6 +19,7 @@ textarea{
 	padding:10px;
 	background-color:#fefefe;
 	color:#888;
+	resize:none;
 }
 mark {
 	background-color:transparent;

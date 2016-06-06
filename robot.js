@@ -113,27 +113,28 @@ robot.fail = function() {
 	document.getElementById('c_'+robot.x+'_'+robot.y).classList.remove('fill');
 	throw 'collision';
 }
-robot.parseCommand = function(command) {
-	command = command.replace(/\s(влево|вправо|вверх|вниз)\s/g,'  $1  '); //волшебный костыль №4
-	command = command.replace(/\sвправо\s/g,' robot.right(); ');
-	command = command.replace(/\sвлево\s/g,' robot.left(); ');
-	command = command.replace(/\sвверх\s/g,' robot.up(); ');
-	command = command.replace(/\sвниз\s/g,' robot.down(); ');
-	command = command.replace(/\s(справа|слева|сверху|снизу)\s+(свободно|стена)/g,' $1 ( $2 )');
-	command = command.replace(/\s(справа|слева|сверху|снизу)\s+не\s+(свободно|стена)/g,' $1 (! $2 )');
-	command = command.replace(/\s(клетка)\s+(закрашена|чистая)/g,' $1 ( $2 )');
-	command = command.replace(/\s(клетка)\s+не\s+(закрашена|чистая)/g,' $1 (! $2 )');
-	command = command.replace(/\sстена\s/g,'false');
-	command = command.replace(/\sсвободно\s/g,'true');
-	command = command.replace(/\sчистая\s/g,'false');
-	command = command.replace(/\sзакрашена\s/g,'true');
-	command = command.replace(/\sклетка\s/g,' robot.isFill ');
-	command = command.replace(/\sсправа\s/g,' robot.onRight ');
-	command = command.replace(/\sслева\s/g,' robot.onLeft ');
-	command = command.replace(/\sсверху\s/g,' robot.onTop ');
-	command = command.replace(/\sснизу\s/g,' robot.onBottom ');
-	command = command.replace(/\sзакрасить\s/g,' robot.paint(); ');
-	return command;
+robot.parseCommand = function(commands) {
+	jsCommand = '';
+	commands.split('\n').forEach(function(command) {
+		command = command.replace(/\sвправо\s/g,' robot.right(); ');
+		command = command.replace(/\sвлево\s/g,' robot.left(); ');
+		command = command.replace(/\sвверх\s/g,' robot.up(); ');
+		command = command.replace(/\sвниз\s/g,' robot.down(); ');
+		command = command.replace(/\s(справа|слева|сверху|снизу)\s+(свободно|стена)/g,' $1 ( $2 )');
+		command = command.replace(/\s(справа|слева|сверху|снизу)\s+не\s+(свободно|стена)/g,' $1 (! $2 )');
+		command = command.replace(/\s(клетка)\s+(закрашена|чистая)/g,' $1 ( $2 )');
+		command = command.replace(/\s(клетка)\s+не\s+(закрашена|чистая)/g,' $1 (! $2 )');
+		command = command.replace(/\s(стена|чистая)\s/g,'false');
+		command = command.replace(/\s(свободно|закрашена)\s/g,'true');
+		command = command.replace(/\sклетка\s/g,' robot.isFill');
+		command = command.replace(/\sсправа\s/g,' robot.onRight');
+		command = command.replace(/\sслева\s/g,' robot.onLeft');
+		command = command.replace(/\sсверху\s/g,' robot.onTop');
+		command = command.replace(/\sснизу\s/g,' robot.onBottom');
+		command = command.replace(/\sзакрасить\s/g,' robot.paint(); ');
+		jsCommand += command + '\n';
+	});
+	return jsCommand;
 }
 
 robot.clean = function() {
