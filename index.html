@@ -11,21 +11,28 @@
 <body>
 <div id='left-side'>
 <div id='highlight'></div>
+<div id='error'></div>
 <textarea id='input' spellcheck='false'></textarea><br>
 <textarea id='output' disabled = 'true'></textarea><br>
 <input type='button' value='Выполнить' id='button'>
 </div>
-<div id='right-side'></div>
 <script type='text/javascript'>
 	input = document.getElementById('input');
 	output = document.getElementById('output');
 	button = document.getElementById('button');
 	highlight = document.getElementById('highlight');
-	container = document.getElementById('right-side');
 	startHighlight(highlight,input);
-	robot.board.create(container);
+	robot.board.create();
 	button.onclick = function() {
-		kumir.start(input,output);
+		output.value = '';
+		error.style.display = 'none';
+		var result =kumir.start(input.value);
+		output.value+=result.print;
+		if (result.error!='') {
+			error.style.display = 'block';
+			error.innerHTML = '';
+			error.innerHTML+=result.error;
+		}
 	}
 </script>
 </body>

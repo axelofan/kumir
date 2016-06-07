@@ -1,18 +1,9 @@
 kumir = {};
 
 //запуск интерпретатора
-kumir.start = function(input, output) {
-	kumir.input = input;
-	kumir.output = output;
-	kumir.output.innerHTML='';
-	
-	kumir.parseCommand(input.value);
-}
-
-//Парсинг команд
-kumir.parseCommand = function(commands) {
-
-	var jsCommand ='';
+kumir.start = function(commands) {
+	kumir.print = '';
+	kumir.error = '';
 	
 	//Скрытие текста с кавычками (чтобы он не менялся)
 	var substring=commands.match(/'[^']*'|"[^"]*"/g);
@@ -20,16 +11,38 @@ kumir.parseCommand = function(commands) {
 	
 	commands = ' ' + commands.replace(/\n/g,' \n ') + ' '; //волшебный костыль №1
 	
-	//Проверка на наличие и парсинг команд для исполнителя Робот 
-	if (/\sиспользовать\s+Робот\s/.test(commands)) {
+	//Проверка на наличие и парсинг команд для исполнителя Робот
+	if (/\sиспользовать\s+Робот\s/.test(commands) && robot) {
 		commands = commands.replace(/\sиспользовать\s+Робот\s/g,'');
 		commands = robot.parseCommand(commands);
 	}
 	
+	commands = kumir.parseCommand(commands); //трансляция в JavaScript
+	
+	for (i in substring) commands = commands.replace('$_'+i,substring[i]); //Возврат текста в кавычках
+	
+	console.log(commands);
+	
+	/**Данная конструкция отлавливает ошибки,
+		основной catch отлавливает ошибки синтаксиса,
+		catch внутри eval отлавливает остальные ошибки программы*/
+	try {
+		eval('try{'+commands+'}catch(e){if(e=="collision") kumir.error+="Столкновение с препятствием!"; else kumir.error+="Ошибка в строке "+e.stack.match(/<anonymous>:(\\d+):/)[1]+"!";}');
+	}
+	catch(e) {kumir.error+='Ошибка синтаксиса!';}
+	
+	return {'print':kumir.print, 'error':kumir.error};
+}
+
+//Парсинг команд
+kumir.parseCommand = function(commands) {
+
+	var jsCommand ='';
+	
 	//Парсинг основных команд
 	commands.split('\n').forEach(function(command) {
-		command = command.replace(/\sвывод\s(.+)/g,' kumir.print($1);'); //замена команды вывода
-		command = command.replace(/\sввод\s(.+)/g,' [$1]:=kumir.read([$1]);'); //замена команды ввода
+		command = command.replace(/\sвывод\s(.+)/g,' kumir.print+:=[$1].join("")'); //замена команды вывода
+		command = command.replace(/\sввод\s(.+)/g,' [$1]:=kumir.read([$1])'); //замена команды ввода
 	
 		command = command.replace(/\s(?:лог|лит|сим|цел|вещ)\s(.+)/g,' var $1;'); //замена объявления переменных
 		
@@ -61,16 +74,8 @@ kumir.parseCommand = function(commands) {
 		
 		jsCommand+=command+'\n';
 	});
-
-	for (i in substring) jsCommand = jsCommand.replace('$_'+i,substring[i]); //Возврат текста в кавычках
 	
-	console.log(jsCommand);
-	eval('try{'+jsCommand+'}catch(e){console.log(e.stack);}');
-}
-
-//вывод сообщений на экран
-kumir.print = function() {
-	for(i in arguments) kumir.output.value+= arguments[i];
+	return jsCommand;
 }
 
 //ввод переменных

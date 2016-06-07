@@ -1,5 +1,5 @@
 /**Подсветка синтаксиса*/
-#highlight, textarea {
+#highlight, textarea, #error {
   box-sizing: border-box;
   font: 18px sans-serif;
   letter-spacing: 1px;
@@ -27,7 +27,7 @@ mark {
 .keyword {
   color: Black;
 }
-.exec {
+.command {
 	color: Blue;
 }
 .variable {
@@ -59,7 +59,7 @@ mark {
 }
 
 /**Основные элементы*/
-#right-side {
+#robotBoard {
 	position:absolute;
 	top:0;
 	left:40%;
@@ -87,7 +87,20 @@ mark {
 	width: 100%;
 	height: 30%;
 }
+#error {
+	z-index:2;
+	position:absolute;
+	top:70%;
+	left:0;
+	width: 100%;
+	height: 25px;
+	margin-top:-25px;
+	background-color:Red;
+	display:none;
+	padding-left:10px;
+}
 #button {
+	z-index:3;
 	position:absolute;
 	top:70%;
 	left:100%;
