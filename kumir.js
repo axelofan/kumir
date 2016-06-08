@@ -2,8 +2,6 @@ kumir = {};
 
 //запуск интерпретатора
 kumir.start = function(commands) {
-	kumir.print = '';
-	kumir.error = '';
 	
 	//Скрытие текста с кавычками (чтобы он не менялся)
 	var substring=commands.match(/'[^']*'|"[^"]*"/g);
@@ -12,10 +10,7 @@ kumir.start = function(commands) {
 	commands = ' ' + commands.replace(/\n/g,' \n ') + ' '; //волшебный костыль №1
 	
 	//Проверка на наличие и парсинг команд для исполнителя Робот
-	if (/\sиспользовать\s+Робот\s/.test(commands) && robot) {
-		commands = commands.replace(/\sиспользовать\s+Робот\s/g,'');
-		commands = robot.parseCommand(commands);
-	}
+	if (robot) commands = robot.parseCommand(commands);
 	
 	commands = kumir.parseCommand(commands); //трансляция в JavaScript
 	
@@ -27,11 +22,9 @@ kumir.start = function(commands) {
 		основной catch отлавливает ошибки синтаксиса,
 		catch внутри eval отлавливает остальные ошибки программы*/
 	try {
-		eval('try{'+commands+'}catch(e){if(e=="collision") kumir.error+="Столкновение с препятствием!"; else kumir.error+="Ошибка в строке "+e.stack.match(/<anonymous>:(\\d+):/)[1]+"!";}');
+		eval('try{'+commands+'}catch(e){if(e=="collision") kumir.error("Столкновение с препятствием!"); else kumir.error("Ошибка в строке "+e.stack.match(/<anonymous>:(\\d+):/)[1]+"!");}');
 	}
-	catch(e) {kumir.error+='Ошибка синтаксиса!';}
-	
-	return {'print':kumir.print, 'error':kumir.error};
+	catch(e) {kumir.error('Ошибка синтаксиса!');}
 }
 
 //Парсинг команд
@@ -41,7 +34,7 @@ kumir.parseCommand = function(commands) {
 	
 	//Парсинг основных команд
 	commands.split('\n').forEach(function(command) {
-		command = command.replace(/\sвывод\s(.+)/g,' kumir.print+:=[$1].join("")'); //замена команды вывода
+		command = command.replace(/\sвывод\s(.+)/g,' kumir.print($1);'); //замена команды вывода
 		command = command.replace(/\sввод\s(.+)/g,' [$1]:=kumir.read([$1])'); //замена команды ввода
 	
 		command = command.replace(/\s(?:лог|лит|сим|цел|вещ)\s(.+)/g,' var $1;'); //замена объявления переменных
@@ -76,6 +69,20 @@ kumir.parseCommand = function(commands) {
 	});
 	
 	return jsCommand;
+}
+
+//вывод сообщений
+kumir.print = function() {
+	var message = '';
+	for (i in arguments) message+=arguments[i];
+	var event = new CustomEvent('print',{detail:message});
+	document.dispatchEvent(event);
+}
+
+//вывод ошибок
+kumir.error = function(errorMsg) {
+	var event = new CustomEvent('error',{detail:errorMsg});
+	document.dispatchEvent(event);
 }
 
 //ввод переменных

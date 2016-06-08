@@ -1,29 +1,4 @@
-/**Подсветка синтаксиса*/
-#highlight, textarea, #error {
-  box-sizing: border-box;
-  font: 18px sans-serif;
-  letter-spacing: 1px;
-}
-#highlight {
-	z-index:2;
-    position:absolute;
-	padding:11px;
-	top:0;
-	left:0;
-	white-space: pre-wrap;
-	color:transparent;
-	background-color:transparent;
-	pointer-events: none;
-}
-textarea{
-	padding:10px;
-	background-color:#fefefe;
-	color:#888;
-	resize:none;
-}
-mark {
-	background-color:transparent;
-}
+/** Подсветка синтаксиса. Классы указываются в highlight.js*/
 .keyword {
   color: Black;
 }
@@ -33,32 +8,17 @@ mark {
 .variable {
 	color: Orange;
 }
-
-/*Модификаторы для клеток и стен*/
-.cells {
-	background:Lime;
-}
-.active {
-	background-color:Orange !important;
-}
-.fail {
-	background-color:Red !important;
-}
-.walls {
-	background:LimeGreen;
-}
-.walls:hover {
-	background:Gold;
-}
-.robot {
-	background-image:url(robot.png);
-    background-size:contain;
-}
-.fill {
-	background-color: Gray !important;
-}
-
 /**Основные элементы*/
+textarea, #error {
+  font: 18px sans-serif;
+  box-sizing:border-box;
+}
+textarea{
+	padding:10px;
+	background-color:#fefefe;
+	color:#888;
+	resize:none;
+}
 #robotBoard {
 	position:absolute;
 	top:0;
@@ -66,7 +26,7 @@ mark {
 	width : 60%;
 	height : 100%;
 }
-#left-side {
+#editor {
 	position:absolute;
 	top:0;
 	left:0;
