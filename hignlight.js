@@ -14,15 +14,17 @@ function startHighlight(fieldId) {
 
 	
 function applyhighlight(text) {
-  text = text
-    .replace(/\n$/g, '\n\n')
-    .replace(/нач|кон|нц|кц|алг|ввод|вывод|если|то|иначе|при|пока|все|использовать|\:\=/g, '<mark class="keyword">$&</mark>')
-	.replace(/\s(и|или|не|да|нет)\s/g, ' <mark class="keyword">$1</mark> ')
-	.replace(/цел|вещ|лог|сим|лит/g, '<mark class="variable">$&</mark>')
-	.replace(/вправо|влево|вверх|вниз|сверху|снизу|слева|справа|свободно|стена|закрасить|клетка|чистая|закрашена/g,'<mark class="command">$&</mark>');
-  
-  if (isIE) text = text.replace(/ /g, ' <wbr>');
-  return text;
+	var keyword = /(^|\s)(или|и|не|да|нет|нач|кон|нц|кц|алг|ввод|вывод|если|то|иначе|при|пока|все|использовать|для|от|до|шаг)($|\s)/g;
+	var assgn = /\:\=/g;
+	var variable = /(^|\s)(цел|вещ|лог|сим|лит)($|\s*)/g;
+	var command = /(^|\s)(вправо|влево|вверх|вниз|сверху|снизу|слева|справа|свободно|стена|закрасить|клетка|чистая|закрашена)($|\s)/g;
+	text = text.replace(/\n$/g, '\n\n')
+			   .replace(assgn, '<mark style="color:Black;">$&</mark>');
+	while (keyword.test(text)) text = text.replace(keyword,'$1<mark style="color:Black;">$2</mark>$3');
+	while (variable.test(text)) text = text.replace(variable,'$1<mark style="color:Orange;">$2</mark>$3');
+	while (command.test(text)) text = text.replace(command,'$1<mark style="color:Blue;">$2</mark>$3');
+	if (isIE) text = text.replace(/ /g, ' <wbr>');
+	return text;
 }
 
 function handleInput() {
