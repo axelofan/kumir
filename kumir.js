@@ -34,36 +34,31 @@ kumir.parseCommand = function(commands) {
 	
 	//Парсинг основных команд
 	commands.split('\n').forEach(function(command) {
-		command = command.replace(/\sвывод\s(.+)/g,' kumir.print($1);'); //замена команды вывода
-		command = command.replace(/\sввод\s(.+)/g,' [$1]:=kumir.read([$1])'); //замена команды ввода
-	
-		command = command.replace(/\s(?:лог|лит|сим|цел|вещ)\s(.+)/g,' var $1;'); //замена объявления переменных
-		
-		command = command.replace(/([^:><])=/g,'$1=='); //замена знака сравнения
-		command = command.replace(/(.+)\:\=(.+)/g,'$1=$2;'); //замена знака присвоения
-		command = command.replace(/\sда\s/g,'true'); //замена истины
-		command = command.replace(/\sнет\s/g,'false'); //замена лжи
-		command = command.replace(/(.+)<>(.+)/g,'$1!=$2'); //замена знака неравенства
-		command = command.replace(/\sне\s*\(/g,' !('); // замена НЕ со скобкой
-		command = command.replace(/\sне\s((?:.(?!\sи\s|\sили\s|\sто\s|\)))+.)/g,' !( $1 )'); //замена НЕ без скобок
-		command = command.replace(/\sи\s/g,' && '); //замена логического И
-		command = command.replace(/\sили\s/g,' || '); //замена логического ИЛИ
-	
-		command = command.replace(/\sесли\s/g,' if( '); //замена начала условия
-		command = command.replace(/\sто\s/g,' ){ '); //замена начала команд условия
-		command = command.replace(/\sиначе\s/g,' }else{ '); //замена начала альтернативных команд
-		command = command.replace(/\sвсе\s/g,' } '); //замена конца условия
-	
-		command = command.replace(/\sнц\s+пока\s+(.+)/g,' while( $1 ){'); //замена начала цикла while
-		command = command.replace(/\sкц\s+при\s+(.+)\s/g,'}while( $1 )'); //замена конца цикла do..while
-	
-		command = command.replace(/\sкц\s/g,' } ') //замена конца цикла while
-		command = command.replace(/\sнц\s/g, ' do { '); //замена начала цикла do..while
-	
-	
-		command = command.replace(/\sалг\s/g,' ');
-		command = command.replace(/\sнач\s/g,' { '); //замена начала функции
-		command = command.replace(/\sкон\s/g,' } '); //замена конца функции
+		command = command.replace(/\sвывод\s(.+)/g,' kumir.print( $1 );') //замена команды вывода
+		.replace(/\sввод\s(.+)/g,' [$1]:=kumir.read([$1])') //замена команды ввода
+		.replace(/\s(?:лог|лит|сим|цел|вещ)\s(.+)/g,' var $1;') //замена объявления переменных
+		.replace(/([^:><])=/g,'$1==') //замена знака сравнения
+		.replace(/(.+)\:\=(.+)/g,'$1=$2;') //замена знака присвоения
+		.replace(/\sда\s/g,'true') //замена истины
+		.replace(/\sнет\s/g,'false') //замена лжи
+		.replace(/(.+)<>(.+)/g,'$1!=$2') //замена знака неравенства
+		.replace(/\sне\s*\(/g,' !(') // замена НЕ со скобкой
+		.replace(/\sне\s((?:.(?!\sи\s|\sили\s|\sто\s|\)))+.)/g,' !( $1 )') //замена НЕ без скобок
+		.replace(/\sи\s/g,' && ') //замена логического И
+		.replace(/\sили\s/g,' || ') //замена логического ИЛИ
+		.replace(/\sесли\s/g,' if( ') //замена начала условия
+		.replace(/\sто\s/g,' ){ ') //замена начала команд условия
+		.replace(/\sиначе\s/g,' }else{ ') //замена начала альтернативных команд
+		.replace(/\sвсе\s/g,' } ') //замена конца условия
+		.replace(/\sнц\s+для\s(.+)\sот\s(.+)\sдо\s(.+)\sшаг\s(.+)/g,'for(var $1=$2;$1<=$3;$1+=$4){') //замена цилка for с шагом
+		.replace(/\sнц\s+для\s(.+)\sот\s(.+)\sдо\s(.+)/g,'for(var $1=$2;$1<=$3;$1++){') //замена цикла for без шага
+		.replace(/\sнц\s+пока\s+(.+)/g,' while( $1 ){') //замена начала цикла while
+		.replace(/\sкц\s+при\s+(.+)\s/g,'}while( $1 )') //замена конца цикла do..while
+		.replace(/\sкц\s/g,' } ') //замена конца цикла while или for
+		.replace(/\sнц\s/g, ' do { ') //замена начала цикла do..while
+		.replace(/\sалг\s/g,' ') //замена объявления функции
+		.replace(/\sнач\s/g,' { ') //замена начала функции
+		.replace(/\sкон\s/g,' } '); //замена конца функции
 		
 		jsCommand+=command+'\n';
 	});

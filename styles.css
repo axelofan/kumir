@@ -1,13 +1,3 @@
-/** Подсветка синтаксиса. Классы указываются в highlight.js*/
-.keyword {
-  color: Black;
-}
-.command {
-	color: Blue;
-}
-.variable {
-	color: Orange;
-}
 /**Основные элементы*/
 textarea, #error {
   font: 18px sans-serif;
