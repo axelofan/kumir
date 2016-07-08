@@ -1,14 +1,14 @@
-/**Код честно позаимствован (с кучей доработок) с Codepen. Безымянный автор, спасибо тебе*/
-var isIE,isWinPhone;
+/**Код честно позаимствован (с кучей доработок) с http://codepen.io/lonekorean/pen/gaLEMR. Will Boyd, спасибо тебе*/
+var isIE;
 var highlight, textarea;
 function startHighlight(fieldId) {
 	textarea = document.getElementById(fieldId);
 	highlight = createDiv(fieldId);
 	var ua = window.navigator.userAgent.toLowerCase();
 	isIE = !!ua.match(/msie|trident\/7|edge/);
-	isWinPhone = ua.indexOf('windows phone') !== -1;
 	
-	textarea.oninput = function(){handleInput();}
+	textarea.oninput = handleInput;
+	textarea.onscroll = handleScroll;
 	handleInput();
 }
 
@@ -16,7 +16,7 @@ function startHighlight(fieldId) {
 function applyhighlight(text) {
 	var keyword = /(^|\s)(или|и|не|да|нет|нач|кон|нц|кц|алг|ввод|вывод|если|то|иначе|при|пока|все|использовать|для|от|до|шаг)($|\s)/g;
 	var assgn = /\:\=/g;
-	var variable = /(^|\s)(цел|вещ|лог|сим|лит)($|\s*)/g;
+	var variable = /(^|\s)(цел|вещ|лог|сим|лит|таб|целтаб|вещтаб|логтаб|симтаб|литтаб)($|\s)/g;
 	var command = /(^|\s)(вправо|влево|вверх|вниз|сверху|снизу|слева|справа|свободно|стена|закрасить|клетка|чистая|закрашена)($|\s)/g;
 	text = text.replace(/\n$/g, '\n\n')
 			   .replace(assgn, '<mark style="color:Black;">$&</mark>');
@@ -33,17 +33,23 @@ function handleInput() {
   highlight.innerHTML = highlightedText;
 }
 
+//функция автоматической прокрутки div контейнера вслед за текстовым полем
+function handleScroll() {
+  highlight.scrollTop = textarea.scrollTop;
+  highlight.scrollLeft = textarea.scrollLeft;   
+  console.log(textarea.scrollTop+' '+highlight.scrollTop);
+}
+
 function createDiv(fieldId) {
 	//Создаётся div, по стилю дублирующий текстовое поле, но расположенный над ним
-	//Также у тегов mark убирается фон, а у текстового поля - граница (так надо).
+	//Также у тегов mark убирается фон.
 	
 	var div = document.createElement('div');
 	div.id = fieldId+'HighlightDiv';
 	
 	var sheet = document.createElement('style');
-	sheet.innerHTML += '#'+fieldId+'{border:0}';
 	sheet.innerHTML += '#'+ fieldId+'HighlightDiv mark {background-color:transparent}';
-	sheet.innerHTML += '#'+ fieldId+'HighlightDiv{position:absolute;top:'+textarea.offsetTop+';left:'+textarea.offsetLeft+';font:'+getStyle(textarea,'font')+';padding:'+getStyle(textarea,'padding')+';white-space:pre-wrap;color:transparent;background-color:transparent;pointer-events:none;z-index:2}'
+	sheet.innerHTML += '#'+ fieldId+'HighlightDiv{width:'+getStyle(textarea,'width')+';height:'+getStyle(textarea,'height')+';box-sizing:border-box;position:absolute;top:'+textarea.offsetTop+';left:'+textarea.offsetLeft+';font:'+getStyle(textarea,'font')+';padding:'+getStyle(textarea,'padding')+';white-space:pre-wrap;color:transparent;overflow:auto;background-color:transparent;pointer-events:none;border:'+getStyle(textarea,'border-width')+' solid;}'
 	
 	document.head.appendChild(sheet);
 	return textarea.parentNode.appendChild(div);
