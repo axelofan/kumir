@@ -36,8 +36,7 @@ function handleInput() {
 //функция автоматической прокрутки div контейнера вслед за текстовым полем
 function handleScroll() {
   highlight.scrollTop = textarea.scrollTop;
-  highlight.scrollLeft = textarea.scrollLeft;   
-  console.log(textarea.scrollTop+' '+highlight.scrollTop);
+  highlight.scrollLeft = textarea.scrollLeft;
 }
 
 function createDiv(fieldId) {

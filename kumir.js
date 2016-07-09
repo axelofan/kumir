@@ -36,10 +36,11 @@ kumir.parseCommand = function(commands) {
 	
 	//Парсинг основных команд
 	commands.split('\n').forEach(function(command) {
+		if(/\sалг\s/.test(command)) command = kumir.parseFunction(command); //замена объявления функции
 		command = command.replace(/\sвывод\s(.+)/g,' kumir.print( $1 );') //замена команды вывода
 		.replace(/\sввод\s(.+)/g,' [$1]:=kumir.read([$1])') //замена команды ввода
-		.replace(/\[\d+\:\d+\]/g,'') //убираем обозначения границ массивов (так как в JS это не актуально)
-		.replace(/\s(?:цел|вещ|лог|сим|лит)\s*таб\s(.+)/g,' var $1 := []') //замена объявления массивов
+		.replace(/\[\d+\:\d+\]/g,':=[]') //заменяем обозначения границ массивов
+		.replace(/\sзнач\s+\:=/g,'return ') //замена возвращаемого значения функции
 		.replace(/\s(?:лог|лит|сим|цел|вещ)\s(.+)/g,' var $1;') //замена объявления переменных
 		.replace(/([^:><])=/g,'$1==') //замена знака сравнения
 		.replace(/(.+)\:\=(.+)/g,'$1=$2;') //замена знака присвоения
@@ -60,13 +61,19 @@ kumir.parseCommand = function(commands) {
 		.replace(/\sкц\s+при\s+(.+)\s/g,'}while( $1 )') //замена конца цикла do..while
 		.replace(/\sкц\s/g,' } ') //замена конца цикла while или for
 		.replace(/\sнц\s/g, ' do { ') //замена начала цикла do..while
-		.replace(/\sалг\s/g,' ') //замена объявления функции
 		.replace(/\sнач\s/g,' { ') //замена начала функции
 		.replace(/\sкон\s/g,' } '); //замена конца функции
 		
 		jsCommand+=command+'\n';
 	});
 	return jsCommand;
+}
+
+//Парсинг объявления функций
+kumir.parseFunction = function(command) {
+	return command.replace(/алг\s+$/g,'')
+				.replace(/алг\s(.+\()/g,'function $1')
+				.replace(/\s*(?:цел|вещ|лог|сим|лит)(?:\s*таб|\s)/g,' ')
 }
 
 //вывод сообщений
