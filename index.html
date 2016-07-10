@@ -21,7 +21,7 @@
 	output = document.getElementById('output');
 	button = document.getElementById('button');
 	startHighlight('input');
-	if (robot) robot.board.create('robotBoard');
+	if (robot) robot.create('robotBoard');
 	document.addEventListener('print', function(e) {output.value+=e.detail;});
 	document.addEventListener('error', function(e) {
 		error.style.display = 'block';
