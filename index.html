@@ -20,8 +20,9 @@
 	input = document.getElementById('input');
 	output = document.getElementById('output');
 	button = document.getElementById('button');
+	robotBoard = document.getElementById('robotBoard');
 	startHighlight('input');
-	if (robot) robot.create('robotBoard');
+	if (robot) robot.create(robotBoard);
 	document.addEventListener('print', function(e) {output.value+=e.detail;});
 	document.addEventListener('error', function(e) {
 		error.style.display = 'block';
