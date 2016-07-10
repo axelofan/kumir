@@ -31,7 +31,7 @@ function Wall(x,y,isVertical) {
 	this.isHover = false;
 }
 
-robot.create = function(divId) {
+robot.create = function(container) {
 	for(var i=0; i<=robot.VCELLS;i++) {
 		for(var j=0;j<=robot.HCELLS;j++) {
 			robot.cells[i+'_'+j] = new Cell(j,i);
@@ -39,10 +39,10 @@ robot.create = function(divId) {
 			robot.walls['h'+i+'_'+j] = new Wall(j,i,false);
 		}
 	}
-
 	robot.canvas.width = (robot.CELL_SIZE+robot.WALL_SIZE)*robot.HCELLS + robot.WALL_SIZE;
 	robot.canvas.height = (robot.CELL_SIZE+robot.WALL_SIZE)*robot.VCELLS + robot.WALL_SIZE;
-	document.getElementById(divId).appendChild(robot.canvas);
+	container.innerHTML+='<div style=position:absolute;top:5px;left:'+(robot.canvas.width+5)+'px><img width=50px src=clean.png onclick=robot.clean()></div>';
+	container.appendChild(robot.canvas);
 
 	robot.img.src = 'robot.png';
 	robot.img.onload = function() {
@@ -166,6 +166,7 @@ robot.clean = function() {
 		robot.cells[i].isFill=false;
 		robot.cells[i].isFail=false;
 	}
+	robot.draw();
 }
 
 //Парсинг команд Робота
