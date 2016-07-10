@@ -2,91 +2,137 @@ robot={}
 //стартовые настройки
 robot.x = 0;
 robot.y = 0;
-robot.board = {}
-robot.board.width = 10;
-robot.board.height = 10;
-robot.board.cellSize = 50;
-robot.board.wallSize = 3;
+robot.img = new Image();
+robot.canvas = document.createElement('canvas');
+robot.HCELLS = 10;
+robot.VCELLS = 10;
+robot.CELL_SIZE = 50;
+robot.WALL_SIZE = 4;
+robot.cells = {};
+robot.walls={};
 
-//Функция, генерирующая поле для Робота
-robot.board.create = function(divId) {
-	var s = robot.board.cellSize;
-	var w = robot.board.wallSize;
-	
-	var container = document.getElementById(divId);
-	
-	var sheet = document.createElement('style');
-	sheet.innerHTML='.vertical{width:'+w+'px; height:'+(2*w+s)+'px;}.horisontal{width:'+(2*w+s)+'px; height:'+w+'px;}.cells{width:'+s+'px; height:'+s+'px;background:Lime;}.active{background-color:Orange !important;}.fail{background-color:Red !important;}.walls{background:LimeGreen;}.walls:hover{background:Gold;}.robot {background-image:url(robot.png);background-size:contain;}.fill{background-color: Gray !important;}';
-	document.head.appendChild(sheet);
-	
-	for (var i=0 ;i<=robot.board.height;i++) {
-		for (var j=0; j<=robot.board.width;j++) {
-			if (i!=robot.board.height) {
-				var wall = document.createElement('div');
-				wall.classList.add('walls','vertical');
-				if(j==0 || j==robot.board.width) wall.classList.add('active');
-				wall.id = 'v_'+j+'_'+i;
-				wall.style = 'position:absolute; top:'+(w+s)*i+'px; left:'+(w+s)*j+'px;';
-				container.appendChild(wall);
-				wall.onclick = robot.board.setWall(wall);
-			}
-			
-			if (j!=robot.board.width) {
-				var wall = document.createElement('div');
-				wall.classList.add('walls','horisontal');
-				if(i==0 || i==robot.board.height) wall.classList.add('active');
-				wall.id = 'h_'+j+'_'+i;
-				wall.style = 'position:absolute; top:'+(w+s)*i+'px; left:'+(w+s)*j+'px;';
-				container.appendChild(wall);
-				wall.onclick = robot.board.setWall(wall);
-			}
-			
-			if(i!=robot.board.height && j!=robot.board.width) {
-				var cell = document.createElement('div');
-				cell.className = 'cells';
-				cell.id = 'c_'+j+'_'+i;
-				cell.style= 'position:absolute; top:'+(w+(s+w)*i)+'px; left:'+(w+(s+w)*j)+'px;'
-				container.appendChild(cell);
-				cell.onclick = robot.replaceRobot(j,i);
-			}
+function Cell(x,y) {
+	this.x=x;
+	this.y=y;
+	this.top=(robot.CELL_SIZE+robot.WALL_SIZE)*y+robot.WALL_SIZE;
+	this.left=(robot.CELL_SIZE+robot.WALL_SIZE)*x+robot.WALL_SIZE;
+	this.isFill = false;
+	this.isFail = false;
+}
+
+function Wall(x,y,isVertical) {
+	this.x=x;
+	this.y=y;
+	this.top=(robot.CELL_SIZE+robot.WALL_SIZE)*y;
+	this.left=(robot.CELL_SIZE+robot.WALL_SIZE)*x;
+	this.width=(isVertical)?robot.WALL_SIZE:robot.CELL_SIZE+robot.WALL_SIZE;
+	this.height=(isVertical)?robot.CELL_SIZE+robot.WALL_SIZE:robot.WALL_SIZE;
+	this.isActive = false;
+	this.isHover = false;
+}
+
+robot.create = function(divId) {
+	for(var i=0; i<=robot.VCELLS;i++) {
+		for(var j=0;j<=robot.HCELLS;j++) {
+			robot.cells[i+'_'+j] = new Cell(j,i);
+			robot.walls['v'+i+'_'+j] = new Wall(j,i,true);
+			robot.walls['h'+i+'_'+j] = new Wall(j,i,false);
 		}
 	}
-	robot.moveRobot(robot.x, robot.y);
-}
 
-//Функция, генерирующая функции для установки или удаления стен
-robot.board.setWall = function(el) {
-	return function() {
-		el.classList.contains('active') ? el.classList.remove('active') : el.classList.add('active');
+	robot.canvas.width = (robot.CELL_SIZE+robot.WALL_SIZE)*robot.HCELLS + robot.WALL_SIZE;
+	robot.canvas.height = (robot.CELL_SIZE+robot.WALL_SIZE)*robot.VCELLS + robot.WALL_SIZE;
+	document.getElementById(divId).appendChild(robot.canvas);
+
+	robot.img.src = 'robot.png';
+	robot.img.onload = function() {
+		robot.draw();
 	}
 }
 
-//функция, генерирующая функции для клеток поля
-robot.replaceRobot = function(x,y) {
-	return function() {
-		robot.moveRobot(x,y);
+robot.draw = function() {
+	var ctx = robot.canvas.getContext('2d');
+	var robotCell = robot.cells[robot.y+'_'+robot.x];
+	
+	for (i in robot.cells) {
+		var cell = robot.cells[i];
+		ctx.fillStyle=(cell.isFail)?'Red':(cell.isFill)?'Gray':'Lime';
+		ctx.fillRect(cell.left,cell.top,robot.CELL_SIZE,robot.CELL_SIZE);
+	}
+
+	ctx.drawImage(robot.img,robotCell.left,robotCell.top,robot.CELL_SIZE,robot.CELL_SIZE);
+	
+	for (i in robot.walls) {
+		var wall = robot.walls[i];
+		ctx.fillStyle = (wall.isActive||wall.isHover)?'Orange':'LimeGreen'; 
+		ctx.fillRect(wall.left,wall.top,wall.width,wall.height);
 	}
 }
 
-//установка Робота на клетку
-robot.setRobot = function(x,y) {
-	document.getElementById('c_'+x+'_'+y).classList.add('robot');
+robot.canvas.onclick = function(e) {
+	for (i in robot.walls) {
+		var wall = robot.walls[i];
+		var x = e.offsetX - wall.left;
+		var y = e.offsetY - wall.top;
+		if ((x>0)&&(x<wall.width)&&(y>0)&&(y<wall.height)) wall.isActive=!wall.isActive;
+	}
+
+	for (i in robot.cells) {
+		var cell = robot.cells[i];
+		var x = e.offsetX - cell.left;
+		var y = e.offsetY - cell.top;
+		if ((x>0)&&(x<robot.CELL_SIZE)&&(y>0)&&(y<robot.CELL_SIZE)) cell.isFill=!cell.isFill;
+	}
+	robot.draw();
 }
-//удаление Робота с клетки
-robot.removeRobot = function(x,y) {
-	document.getElementById('c_'+x+'_'+y).classList.remove('robot');
+
+robot.canvas.onmousemove = function(e) {
+	for (i in robot.walls) {
+		var wall = robot.walls[i];
+		var x = e.offsetX-wall.left;
+		var y = e.offsetY-wall.top;
+		wall.isHover=((x>0)&&(x<wall.width)&&(y>0)&&(y<wall.height))?true:false;
+	}
+
+	robot.draw();
 }
-//перемещение Робота в нужную клетку
+
+robot.canvas.ondblclick = function(e) {
+	for (i in robot.cells) {
+		var cell = robot.cells[i];
+		var x = e.offsetX - cell.left;
+		var y = e.offsetY - cell.top;
+		if ((x>0)&&(x<robot.CELL_SIZE)&&(y>0)&&(y<robot.CELL_SIZE)) {
+			robot.moveRobot(cell.x,cell.y);	
+		}
+	}
+}
+
 robot.moveRobot = function(x,y) {
-	robot.removeRobot(robot.x,robot.y);
-	robot.setRobot(x,y);
-	robot.x = x;
-	robot.y = y;
+	robot.x=x;
+	robot.y=y;
+	robot.draw();
 }
 
-//закрашивание клетки
 robot.paint = function() {
-	document.getElementById('c_'+robot.x+'_'+robot.y).classList.add('fill');
+	robot.cells[robot.y+'_'+robot.x].isFill=true;
+}
+
+//функции проверки на закрашенность и наличие стен
+robot.isFill = function(fill) {
+	return robot.cells(robot.y+'_'+robot.x).isFill==fill;
+}
+robot.onRight = function(wall) {
+	return !((robot.walls['v'+robot.y+'_'+(robot.x+1)].isActive||(robot.x==robot.HCELLS-1))==wall);
+}
+robot.onLeft = function(wall) {
+	return !((robot.walls['v'+robot.y+'_'+robot.x].isActive||(robot.x==0)) == wall);
+}
+robot.onTop = function(wall) {
+	return !((robot.walls['h'+robot.y+'_'+robot.x].isActive||(robot.y==0)) == wall);
+}
+robot.onBottom = function(wall) {
+	return !((robot.walls['h'+(robot.y+1)+'_'+robot.x].isActive||(robot.y==robot.VCELLS-1)) == wall);
 }
 
 //функции движения
@@ -107,28 +153,19 @@ robot.down = function() {
 	else robot.fail();
 }
 
-//функции проверки на закрашенность и наличие стен
-robot.isFill = function(fill) {
-	return document.getElementById('c_'+robot.x+'_'+robot.y).classList.contains('fill') == fill
-}
-robot.onRight = function(wall) {
-	return !(document.getElementById('v_'+(robot.x+1)+'_'+robot.y).classList.contains('active') == wall);
-}
-robot.onLeft = function(wall) {
-	return !(document.getElementById('v_'+robot.x+'_'+robot.y).classList.contains('active') == wall);
-}
-robot.onTop = function(wall) {
-	return !(document.getElementById('h_'+robot.x+'_'+robot.y).classList.contains('active') == wall);
-}
-robot.onBottom = function(wall) {
-	return !(document.getElementById('h_'+robot.x+'_'+(robot.y+1)).classList.contains('active') == wall);
-}
-
 //Функция, срабатывающая при столкновении
 robot.fail = function() {
-	document.getElementById('c_'+robot.x+'_'+robot.y).classList.add('fail');
-	document.getElementById('c_'+robot.x+'_'+robot.y).classList.remove('fill');
+	robot.cells[robot.y+'_'+robot.x].isFail=true;
+	robot.draw();
 	throw 'collision';
+}
+
+//Очистка поля
+robot.clean = function() {
+	for(i in robot.cells) {
+		robot.cells[i].isFill=false;
+		robot.cells[i].isFail=false;
+	}
 }
 
 //Парсинг команд Робота
@@ -163,12 +200,4 @@ robot.parseCommand = function(commands) {
 		commands = jsCommand;
 	}
 	return commands;
-}
-
-//Очистка поля
-robot.clean = function() {
-	var fillCell = document.getElementsByClassName('fill');
-	var errorCell = document.getElementsByClassName('fail');
-	while(fillCell.length!=0) {fillCell[0].classList.remove('fill');}
-	while(errorCell.length!=0) {errorCell[0].classList.remove('fail');}
 }
