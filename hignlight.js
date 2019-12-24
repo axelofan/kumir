@@ -39,6 +39,13 @@ function handleScroll() {
   highlight.scrollLeft = textarea.scrollLeft;
 }
 
+function getPosition() {
+	if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
+		return 'top:'+(textarea.offsetTop-1)+'px;left:'+(textarea.offsetLeft-1)+'px'
+	else 
+		return 'top:'+textarea.offsetTop+'px;left:'+textarea.offsetLeft+'px'
+}
+
 function createDiv(fieldId) {
 	//Создаётся div, по стилю дублирующий текстовое поле, но расположенный над ним
 	//Также у тегов mark убирается фон.
@@ -48,7 +55,7 @@ function createDiv(fieldId) {
 	
 	var sheet = document.createElement('style');
 	sheet.innerHTML += '#'+ fieldId+'HighlightDiv mark {background-color:transparent}';
-	sheet.innerHTML += '#'+ fieldId+'HighlightDiv{width:'+getStyle(textarea,'width')+';height:'+getStyle(textarea,'height')+';box-sizing:border-box;position:absolute;top:'+textarea.offsetTop+'px;left:'+textarea.offsetLeft+'px;font-family:'+getStyle(textarea,'font-family')+';font-size:'+getStyle(textarea,'font-size')+';padding-top:'+getStyle(textarea,'padding-top')+';padding-right:'+getStyle(textarea,'padding-right')+';padding-bottom:'+getStyle(textarea,'padding-bottom')+';padding-left:'+getStyle(textarea,'padding-left')+';white-space:pre-wrap;color:transparent;overflow:auto;background-color:transparent;pointer-events:none;border:'+getStyle(textarea,'border-width')+' solid;}'
+	sheet.innerHTML += '#'+ fieldId+'HighlightDiv{width:'+getStyle(textarea,'width')+';height:'+getStyle(textarea,'height')+';box-sizing:border-box;position:absolute;'+getPosition()+';font-family:'+getStyle(textarea,'font-family')+';font-size:'+getStyle(textarea,'font-size')+';padding-top:'+getStyle(textarea,'padding-top')+';padding-right:'+getStyle(textarea,'padding-right')+';padding-bottom:'+getStyle(textarea,'padding-bottom')+';padding-left:'+getStyle(textarea,'padding-left')+';white-space:pre-wrap;color:transparent;overflow:auto;background-color:transparent;pointer-events:none;border:'+getStyle(textarea,'border-width')+' solid;}'
 	
 	document.head.appendChild(sheet);
 	return textarea.parentNode.appendChild(div);
