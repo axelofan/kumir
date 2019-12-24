@@ -48,7 +48,7 @@ function createDiv(fieldId) {
 	
 	var sheet = document.createElement('style');
 	sheet.innerHTML += '#'+ fieldId+'HighlightDiv mark {background-color:transparent}';
-	sheet.innerHTML += '#'+ fieldId+'HighlightDiv{width:'+getStyle(textarea,'width')+';height:'+getStyle(textarea,'height')+';box-sizing:border-box;position:absolute;top:'+textarea.offsetTop+';left:'+textarea.offsetLeft+';font:'+getStyle(textarea,'font')+';padding:'+getStyle(textarea,'padding')+';white-space:pre-wrap;color:transparent;overflow:auto;background-color:transparent;pointer-events:none;border:'+getStyle(textarea,'border-width')+' solid;}'
+	sheet.innerHTML += '#'+ fieldId+'HighlightDiv{width:'+getStyle(textarea,'width')+';height:'+getStyle(textarea,'height')+';box-sizing:border-box;position:absolute;top:'+textarea.offsetTop+'px;left:'+textarea.offsetLeft+'px;font-family:'+getStyle(textarea,'font-family')+';font-size:'+getStyle(textarea,'font-size')+';padding-top:'+getStyle(textarea,'padding-top')+';padding-right:'+getStyle(textarea,'padding-right')+';padding-bottom:'+getStyle(textarea,'padding-bottom')+';padding-left:'+getStyle(textarea,'padding-left')+';white-space:pre-wrap;color:transparent;overflow:auto;background-color:transparent;pointer-events:none;border:'+getStyle(textarea,'border-width')+' solid;}'
 	
 	document.head.appendChild(sheet);
 	return textarea.parentNode.appendChild(div);
@@ -62,3 +62,4 @@ function getStyle(el, cssprop) {
 		else // try and get inline style
 			return el.style[cssprop]; // XXX I have no idea who is using that
 }
+
