@@ -39,8 +39,8 @@ kumir.parseCommand = function(commands) {
 	//Парсинг основных команд
 	commands.split('\n').forEach(function(command) {
 		if(/\sалг\s/.test(command)) command = kumir.parseFunction(command); //замена объявления функции
-		command = command.replace(/\sвывод(.+)/g,' kumir.print( $1 );') //замена команды вывода
-		.replace(/\sввод(.+)/g,' [$1]:=kumir.read([$1])') //замена команды ввода
+		command = command.replace(/\sвывод\s(.+)/g,' kumir.print( $1 );') //замена команды вывода
+		.replace(/\sввод\s(.+)/g,' [$1]:=kumir.read([$1])') //замена команды ввода
 		.replace(/\[\d+\:\d+\]/g,':=[]') //заменяем обозначения границ массивов
 		.replace(/\sзнач\s+\:=/g,'return ') //замена возвращаемого значения функции
 		.replace(/\s(?:лог|лит|сим|цел|вещ)\s(.+)/g,' var $1;') //замена объявления переменных
