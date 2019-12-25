@@ -6,13 +6,11 @@ robot.img = new Image();
 robot.canvas = document.createElement('canvas');
 robot.HCELLS = 10;
 robot.VCELLS = 10;
-robot.CELL_SIZE = 50;
+robot.CELL_SIZE = 70;
 robot.WALL_SIZE = 6;
 robot.cells = {};
 robot.walls = {};
-robot.tick = 100;
 robot.startPos = {'x': 0, 'y': 0};
-robot.drawPos = {'x': 0, 'y': 0};
 
 function Cell(x, y) {
     this.x = x;
@@ -44,7 +42,7 @@ robot.create = function (container) {
     }
     robot.canvas.width = (robot.CELL_SIZE + robot.WALL_SIZE) * robot.HCELLS + robot.WALL_SIZE;
     robot.canvas.height = (robot.CELL_SIZE + robot.WALL_SIZE) * robot.VCELLS + robot.WALL_SIZE;
-    container.innerHTML += '<div style=position:absolute;top:5px;left:' + (robot.canvas.width + 5) + 'px><img width=50px src=clean.png onclick=robot.clean() style="user-select:none;"></div>';
+    //container.innerHTML += '<div style=position:absolute;top:5px;left:' + (robot.canvas.width + 5) + 'px><img width=50px src=clean.png onclick=robot.clean() style="user-select:none;"></div>';
     container.appendChild(robot.canvas);
 
     robot.img.src = 'robot.png';
@@ -55,7 +53,7 @@ robot.create = function (container) {
 
 robot.draw = function () {
     var ctx = robot.canvas.getContext('2d');
-    var robotCell = robot.cells[robot.drawPos.y + '_' + robot.drawPos.x];
+    var robotCell = robot.cells[robot.y + '_' + robot.x];
 
     for (i in robot.cells) {
         var cell = robot.cells[i];
@@ -115,33 +113,24 @@ robot.canvas.ondblclick = function (e) {
 robot.moveRobot = function (x, y) {
     robot.x += x;
     robot.y += y;
-    var pos = {'x': robot.x, 'y': robot.y};
-    setTimeout(function () {
-        robot.drawPos = pos;
-        robot.draw();
-    }, robot.tick);
-    robot.tick += 100
-
+    robot.draw();
 }
 
 robot.setPosition = function (x, y) {
     robot.x = x;
     robot.y = y;
-    robot.drawPos = {'x': robot.x, 'y': robot.y};
     robot.draw();
 };
 
 robot.paint = function () {
-    setTimeout(function () {
-        robot.cells[robot.drawPos.y + '_' + robot.drawPos.x].isFill = true;
-        setTimeout(robot.draw, 20);
-    }, robot.tick);
-    robot.tick += 100
+    robot.cells[robot.y + '_' + robot.x].isFill = true;
+    robot.draw();
+
 }
 
 //функции проверки на закрашенность и наличие стен
 robot.isFill = function (fill) {
-    return robot.cells(robot.y + '_' + robot.x).isFill == fill;
+    return robot.cells[robot.y + '_' + robot.x].isFill == fill;
 }
 robot.onRight = function (wall) {
     return !((robot.walls['v' + robot.y + '_' + (robot.x + 1)].isActive || (robot.x == robot.HCELLS - 1)) == wall);

@@ -39,11 +39,11 @@ function handleScroll() {
   highlight.scrollLeft = textarea.scrollLeft;
 }
 
-function getPosition() {
+function fixFirefox() {
 	if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
-		return 'top:'+(textarea.offsetTop-1)+'px;left:'+(textarea.offsetLeft-1)+'px'
+		return 'top:'+(textarea.offsetTop-1)+'px;left:'+(textarea.offsetLeft-1)+'px'+';height:'+(parseInt( getStyle(textarea,'height') )-8)+'px'
 	else 
-		return 'top:'+textarea.offsetTop+'px;left:'+textarea.offsetLeft+'px'
+		return 'top:'+textarea.offsetTop+'px;left:'+textarea.offsetLeft+'px'+';height:'+getStyle(textarea,'height')
 }
 
 function createDiv(fieldId) {
@@ -55,7 +55,7 @@ function createDiv(fieldId) {
 	
 	var sheet = document.createElement('style');
 	sheet.innerHTML += '#'+ fieldId+'HighlightDiv mark {background-color:transparent}';
-	sheet.innerHTML += '#'+ fieldId+'HighlightDiv{width:'+getStyle(textarea,'width')+';height:'+getStyle(textarea,'height')+';box-sizing:border-box;position:absolute;'+getPosition()+';font-family:'+getStyle(textarea,'font-family')+';font-size:'+getStyle(textarea,'font-size')+';padding-top:'+getStyle(textarea,'padding-top')+';padding-right:'+getStyle(textarea,'padding-right')+';padding-bottom:'+getStyle(textarea,'padding-bottom')+';padding-left:'+getStyle(textarea,'padding-left')+';white-space:pre-wrap;color:transparent;overflow:auto;background-color:transparent;pointer-events:none;border:'+getStyle(textarea,'border-width')+' solid;}'
+	sheet.innerHTML += '#'+ fieldId+'HighlightDiv{width:'+getStyle(textarea,'width')+';box-sizing:border-box;position:absolute;'+fixFirefox()+';font-family:'+getStyle(textarea,'font-family')+';font-size:'+getStyle(textarea,'font-size')+';padding-top:'+getStyle(textarea,'padding-top')+';padding-right:'+getStyle(textarea,'padding-right')+';padding-bottom:'+getStyle(textarea,'padding-bottom')+';padding-left:'+getStyle(textarea,'padding-left')+';white-space:pre-wrap;color:transparent;overflow:hidden;background-color:transparent;pointer-events:none;border:'+getStyle(textarea,'border-width')+' solid;}'
 	
 	document.head.appendChild(sheet);
 	return textarea.parentNode.appendChild(div);
