@@ -10,15 +10,13 @@ kumir.start = function(commands) {
 	commands = ' ' + commands.replace(/\n/g,' \n ') + ' '; //волшебный костыль №1
 	
 	//Проверка на наличие и парсинг команд для исполнителя Робот
-	robot.tick = 0;
 	if (robot) commands = robot.parseCommand(commands);
 
-	
 	commands = kumir.parseCommand(commands); //трансляция в JavaScript
 	
 	for (i in substring) commands = commands.replace('$_'+i,substring[i]); //Возврат текста в кавычках
 	
-	console.log(commands);
+	//console.log(commands);
 	
 	/**
 	* Данная конструкция отлавливает ошибки,
