@@ -1,6 +1,6 @@
 const kumir = {};
 
-//запуск интерпретатора
+//запуск транспайлера
 kumir.start = function(commands) {
 	
 	//Скрытие текста с кавычками (чтобы он не менялся)
@@ -16,7 +16,7 @@ kumir.start = function(commands) {
 	commands = kumir.parseCommand(commands); //трансляция в JavaScript
 	
 	for (let i in substring) commands = commands.replace('$_'+i,substring[i]); //Возврат текста в кавычках
-	
+
 	/**
 	* Данная конструкция отлавливает ошибки,
 	* основной catch отлавливает ошибки синтаксиса,
@@ -38,7 +38,6 @@ kumir.parseCommand = function(commands) {
 		if(/\sалг\s/.test(command)) command = kumir.parseFunction(command); //замена объявления функции
 		command = command.replace(/\sвывод\s(.+)/g,' kumir.print( $1 );') //замена команды вывода
 		.replace(/\sввод\s(.+)/g,' [$1]:=kumir.read([$1])') //замена команды ввода
-		.replace(/\[\d+\:\d+\]/g,':=[]') //заменяем обозначения границ массивов
 		.replace(/\sзнач\s+\:=/g,'return ') //замена возвращаемого значения функции
 		.replace(/\s(?:лог|лит|сим|цел|вещ)\s(.+)/g,' var $1;') //замена объявления переменных
 		.replace(/([^:><])=/g,'$1==') //замена знака сравнения
@@ -72,7 +71,7 @@ kumir.parseCommand = function(commands) {
 kumir.parseFunction = function(command) {
 	return command.replace(/алг\s+$/g,'')
 				.replace(/алг\s(.+\()/g,'function $1')
-				.replace(/\s*(?:цел|вещ|лог|сим|лит)(?:\s*таб|\s)/g,' ')
+				.replace(/\s*(?:цел|вещ|лог|сим|лит)/g,' ')
 }
 
 //вывод сообщений
