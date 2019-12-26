@@ -1,11 +1,11 @@
-kumir = {};
+const kumir = {};
 
 //запуск интерпретатора
 kumir.start = function(commands) {
 	
 	//Скрытие текста с кавычками (чтобы он не менялся)
-	var substring=commands.match(/'[^']*'|"[^"]*"/g);
-	for (i in substring) commands = commands.replace(substring[i],'$_'+i);
+	let substring=commands.match(/'[^']*'|"[^"]*"/g);
+	for (let i in substring) commands = commands.replace(substring[i],'$_'+i);
 	
 	commands = ' ' + commands.replace(/\n/g,' \n ') + ' '; //волшебный костыль №1
 	
@@ -14,9 +14,7 @@ kumir.start = function(commands) {
 
 	commands = kumir.parseCommand(commands); //трансляция в JavaScript
 	
-	for (i in substring) commands = commands.replace('$_'+i,substring[i]); //Возврат текста в кавычках
-	
-	//console.log(commands);
+	for (let i in substring) commands = commands.replace('$_'+i,substring[i]); //Возврат текста в кавычках
 	
 	/**
 	* Данная конструкция отлавливает ошибки,
@@ -32,7 +30,7 @@ kumir.start = function(commands) {
 //Парсинг команд
 kumir.parseCommand = function(commands) {
 
-	var jsCommand ='';
+	let jsCommand ='';
 	
 	//Парсинг основных команд
 	commands.split('\n').forEach(function(command) {
@@ -78,22 +76,22 @@ kumir.parseFunction = function(command) {
 
 //вывод сообщений
 kumir.print = function() {
-	var message = '';
-	for (i in arguments) message+=arguments[i];
-	var event = new CustomEvent('print',{detail:message});
+	let message = '';
+	for (let i in arguments) message+=arguments[i];
+	let event = new CustomEvent('print',{detail:message});
 	document.dispatchEvent(event);
 }
 
 //вывод ошибок
 kumir.error = function(errorMsg) {
-	var event = new CustomEvent('error',{detail:errorMsg});
+	let event = new CustomEvent('error',{detail:errorMsg});
 	document.dispatchEvent(event);
 }
 
 //ввод переменных
 kumir.read = function(args) {
-	var s = prompt('Введите переменные через пробел');
+	let s = prompt('Введите переменные через пробел');
 	s = s.split(' ');
-	for(i in args) isNaN(s[i]) ? args[i] = s[i] : args[i] = +s[i];
+	for(let i in args) isNaN(s[i]) ? args[i] = s[i] : args[i] = +s[i];
 	return args;
 }
