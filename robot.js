@@ -4,8 +4,8 @@ robot.x = 0;
 robot.y = 0;
 robot.img = new Image();
 robot.canvas = document.createElement('canvas');
-robot.HCELLS = 10;
-robot.VCELLS = 10;
+robot.HCELLS = 13;
+robot.VCELLS = 13;
 robot.CELL_SIZE = 70;
 robot.WALL_SIZE = 6;
 robot.cells = {};
@@ -37,6 +37,13 @@ class Wall {
 }
 
 robot.create = function (container) {
+
+    let a = (container.offsetHeight - robot.WALL_SIZE) / (robot.WALL_SIZE + robot.CELL_SIZE) >> 0
+    let b = (container.offsetWidth - robot.WALL_SIZE) / (robot.WALL_SIZE + robot.CELL_SIZE) >> 0
+
+    robot.HCELLS=b
+    robot.VCELLS=a
+
     for (let i = 0; i <= robot.VCELLS; i++) {
         for (let j = 0; j <= robot.HCELLS; j++) {
             robot.cells[i + '_' + j] = new Cell(j, i);
