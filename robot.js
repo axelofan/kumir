@@ -120,7 +120,7 @@ robot.canvas.onclick = function (e) {
     robot.draw();
 }
 
-robot.canvas.onmousemove = function (e) {
+/*robot.canvas.onmousemove = function (e) {
     for (let i in robot.walls) {
         let wall = robot.walls[i];
         let x = e.offsetX - wall.left;
@@ -129,7 +129,7 @@ robot.canvas.onmousemove = function (e) {
     }
 
     robot.draw();
-}
+}*/
 
 robot.canvas.ondblclick = function (e) {
     for (let i in robot.cells) {
