@@ -38,8 +38,6 @@ class Wall {
 
 robot.create = function (container) {
 
-    if(container.offsetWidth<500) robot.WALL_SIZE=20
-
     let a = (container.offsetHeight - robot.WALL_SIZE) / (robot.WALL_SIZE + robot.CELL_SIZE) >> 0
     let b = (container.offsetWidth - robot.WALL_SIZE) / (robot.WALL_SIZE + robot.CELL_SIZE) >> 0
 
