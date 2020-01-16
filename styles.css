@@ -55,3 +55,13 @@ textarea {
 .canvas {
     grid-area:canvas;
 }
+
+@media screen and (max-width:960px) {
+    #app {
+        grid-template-rows: 1fr 100px;
+        grid-template-columns: 100% 60%;
+        grid-template-areas: 
+            "editor canvas"
+            "messages canvas"
+    }
+}
