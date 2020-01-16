@@ -1,70 +1,57 @@
-/**Основные элементы*/
-button, textarea, body, input {
-    font: 400 150%/1.2 "Segoe UI", "Roboto", "Helvetica Neue", sans-serif;
-}
-
-textarea, #error {
+* {
+    margin:0;
     box-sizing: border-box;
+    font-family: monospace;
 }
 
 textarea {
-    padding: 10px;
     background-color: #fefefe;
     color: #888;
     resize: none;
-}
-
-#robotBoard {
-    position: absolute;
-    top: 0;
-    left: 40%;
-    width: 60%;
+    font-size:2em;
+    width: 100%;
     height: 100%;
 }
 
-#editor {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 40%;
-    height: 100%;
+#app {
+    width: 100vw;
+    height: 100vh;
+    display:grid;
+    grid-template-rows: 1fr 100px;
+    grid-template-columns: 40% 60%;
+    grid-template-areas: 
+        "editor canvas"
+        "messages canvas"
 }
 
-#input {
-    font-family: monospace;
-    position: absolute;
-    outline: none;
-    width: 100%;
-    height: 70%;
+.editor {
+    grid-area: editor;
 }
 
-#output {
-    outline: none;
-    position: absolute;
-    top: 70%;
-    left: 0;
-    width: 100%;
-    height: 30%;
+.messages {
+    position: relative;
+    grid-area: messages;
 }
 
-#error {
-    z-index: 2;
+.messages #button {
+    position: absolute;
+    top:0;
+    right:0;
+    font-size:1.5em;
+}
+
+.messages #error {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     padding:10px;
-    margin-top: -25px;
     background-color: Red;
+    color: white;
+    font-weight: 600;
     display: none;
 }
 
-#button {
-    z-index: 3;
-    position: absolute;
-    top: 70%;
-    right: 0;
-    padding: 5px;
-    margin-right: 0;
-    margin-bottom: 0;
+.canvas {
+    grid-area:canvas;
 }
