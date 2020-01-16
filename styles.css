@@ -4,6 +4,10 @@
     font-family: monospace;
 }
 
+body {
+    overscroll-behavior: contain;
+}
+
 textarea {
     background-color: #fefefe;
     color: #888;
