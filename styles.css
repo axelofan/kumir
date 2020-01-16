@@ -70,4 +70,9 @@ textarea {
     .messages {
         display:none;
     }
+    #app {
+        grid-template-columns: 100% 200%;
+        grid-template-areas: 
+            "editor canvas"
+    }
 }
