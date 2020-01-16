@@ -59,9 +59,15 @@ textarea {
 @media screen and (max-width:960px) {
     #app {
         grid-template-rows: 1fr 200px;
-        grid-template-columns: 100% 100%;
+        grid-template-columns: 100% 200%;
         grid-template-areas: 
             "editor canvas"
             "messages canvas"
+    }
+}
+
+@media screen and (max-height:500px) {
+    .messages {
+        display:none;
     }
 }
