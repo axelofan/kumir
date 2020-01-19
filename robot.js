@@ -103,6 +103,26 @@ robot.draw = function (move) {
     if(move) robot.drawQueue.push(canvas);
 }
 
+//Долгий тап для мобильных устройств
+robot.delay=null;
+robot.canvas.addEventListener('mousedown', function(e) {
+    robot.delay = setTimeout(()=>check(e),500)
+
+    function check(e){
+        for (let i in robot.cells) {
+            let cell = robot.cells[i];
+            let x = e.offsetX - cell.left;
+            let y = e.offsetY - cell.top;
+            if ((x > 0) && (x < robot.CELL_SIZE) && (y > 0) && (y < robot.CELL_SIZE)) {
+                robot.startPos = {'x': cell.x, 'y': cell.y};
+                robot.setPosition(cell.x, cell.y);
+            }
+        }
+    }
+},true)
+robot.canvas.addEventListener('mouseup', function (e) {clearTimeout(robot.delay)});
+robot.canvas.addEventListener('mouseout', function (e) {clearTimeout(robot.delay)});
+
 robot.canvas.onclick = function (e) {
     for (let i in robot.walls) {
         let wall = robot.walls[i];
@@ -119,17 +139,6 @@ robot.canvas.onclick = function (e) {
     }
     robot.draw();
 }
-
-/*robot.canvas.onmousemove = function (e) {
-    for (let i in robot.walls) {
-        let wall = robot.walls[i];
-        let x = e.offsetX - wall.left;
-        let y = e.offsetY - wall.top;
-        wall.isHover = ((x > 0) && (x < wall.width) && (y > 0) && (y < wall.height)) ? true : false;
-    }
-
-    robot.draw();
-}*/
 
 robot.canvas.ondblclick = function (e) {
     for (let i in robot.cells) {
