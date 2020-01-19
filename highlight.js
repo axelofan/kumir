@@ -56,7 +56,6 @@ function createDiv(fieldId) {
 	var sheet = document.createElement('style');
 	sheet.innerHTML += '#'+ fieldId+'HighlightDiv mark {background-color:transparent}';
 	sheet.innerHTML += '#'+ fieldId+'HighlightDiv{width:'+getStyle(textarea,'width')+';box-sizing:border-box;position:absolute;'+fixFirefox()+';font-family:'+getStyle(textarea,'font-family')+';font-size:'+getStyle(textarea,'font-size')+';padding-top:'+getStyle(textarea,'padding-top')+';padding-right:'+getStyle(textarea,'padding-right')+';padding-bottom:'+getStyle(textarea,'padding-bottom')+';padding-left:'+getStyle(textarea,'padding-left')+';white-space:pre-wrap;color:transparent;overflow:hidden;background-color:transparent;pointer-events:none;border:'+getStyle(textarea,'border-width')+' solid;}'
-	
 	document.head.appendChild(sheet);
 	return textarea.parentNode.appendChild(div);
 }

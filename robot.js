@@ -106,7 +106,9 @@ robot.draw = function (move) {
 //Долгий тап для мобильных устройств
 robot.delay=null;
 robot.canvas.addEventListener('touchstart', function(e) {
-    robot.delay = setTimeout(()=>check(e),500)
+    e.offsetX = e.touches[0].pageX-robot.canvas.offsetLeft
+    e.offsetY = e.touches[0].pageY-robot.canvas.offsetTop
+    robot.delay = setTimeout(()=>check(e),1000)
 
     function check(e){
         for (let i in robot.cells) {
