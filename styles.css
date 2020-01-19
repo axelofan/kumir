@@ -29,11 +29,11 @@ textarea {
 }
 
 .mobile-app {
-    width: 100vw;
-    height: 100vh;
+    width: 1400px;
+    height: 1000px;
     display:grid;
-    grid-template-rows: 200% 100px;
-    grid-template-columns: 100% 300%;
+    grid-template-rows: 800px 200px;
+    grid-template-columns: 400px 1000px;
     grid-template-areas: 
         "editor canvas"
         "messages canvas"
