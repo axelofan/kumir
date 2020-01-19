@@ -105,7 +105,7 @@ robot.draw = function (move) {
 
 //Долгий тап для мобильных устройств
 robot.delay=null;
-robot.canvas.addEventListener('mousedown', function(e) {
+robot.canvas.addEventListener('touchstart', function(e) {
     robot.delay = setTimeout(()=>check(e),500)
 
     function check(e){
@@ -120,8 +120,8 @@ robot.canvas.addEventListener('mousedown', function(e) {
         }
     }
 },true)
-robot.canvas.addEventListener('mouseup', function (e) {clearTimeout(robot.delay)});
-robot.canvas.addEventListener('mouseout', function (e) {clearTimeout(robot.delay)});
+robot.canvas.addEventListener('touchend', function (e) {clearTimeout(robot.delay)});
+robot.canvas.addEventListener('touchmove', function (e) {clearTimeout(robot.delay)});
 
 robot.canvas.onclick = function (e) {
     for (let i in robot.walls) {
