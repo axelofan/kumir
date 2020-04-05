@@ -16,6 +16,8 @@ kumir.start = function(commands) {
 	
 	for (let i in substring) commands = commands.replace('$_'+i,substring[i]); //Возврат текста в кавычках
 
+	console.log(commands)
+
 	/**
 	* Данная конструкция отлавливает ошибки,
 	* основной catch отлавливает ошибки синтаксиса,
@@ -52,6 +54,7 @@ kumir.parseCommand = function(commands) {
 		.replace(/\sто\s/g,' ){ ') //замена начала команд условия
 		.replace(/\sиначе\s/g,' }else{ ') //замена начала альтернативных команд
 		.replace(/\sвсе\s/g,' } ') //замена конца условия
+		.replace(/\sнц\s(.+)\sраз\s/,'for(i=1;i<=($1);i++){')
 		.replace(/\sнц\s+для\s(.+)\sот\s(.+)\sдо\s(.+)\sшаг\s(.+)/g,'for($1=$2;($2<$3&&$1<=$3)||($2>=$3&&$1>=$3);$1+=$4){') //замена цилка for с шагом
 		.replace(/\sнц\s+для\s(.+)\sот\s(.+)\sдо\s(.+)/g,'for($1=$2;$1<=$3;$1++){') //замена цикла for без шага
 		.replace(/\sнц\s+пока\s+(.+)/g,' while( $1 ){') //замена начала цикла while
